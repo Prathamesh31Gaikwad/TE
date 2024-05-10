@@ -1,0 +1,108 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution
+{
+private:
+    void dfs(int node, vector<int> adj[], int vis[], vector<int> &ls)
+    {
+        vis[node] = 1;
+        ls.push_back(node);
+        // traverse all its neighbours
+        for (auto it : adj[node])
+        {
+   
+            if (!vis[it])
+            {
+                dfs(it, adj, vis, ls);
+            }
+        }
+    }
+    
+public:
+    // Function to return a list containing the DFS traversal of the graph.
+    vector<int> dfsOfGraph(int V, vector<int> adj[])
+    {
+        int vis[V] = {0};
+        int start = 0;
+        // create a list to store dfs
+        vector<int> ls;
+        // call dfs for starting node
+        dfs(start, adj, vis, ls);
+        return ls;
+    }
+     vector<int> bfsOfGraph(int V, vector<int> adj[])
+    {
+        int vis[V] = {0};
+        vis[0] = 1;
+        queue<int> q;
+        // push the initial starting node
+        q.push(0);
+        vector<int> bfs;
+        // iterate till the queue is empty
+        while (!q.empty())
+        {
+            // get the topmost element in the queue
+            int node = q.front();
+            q.pop();
+            bfs.push_back(node);
+            // traverse for all its neighbours
+            for (auto it : adj[node])
+            {
+                // if the neighbour has previously not been visited,
+                // store in Q and mark as visited
+                if (!vis[it])
+                {
+                    vis[it] = 1;
+                    q.push(it);
+                }
+            }
+        }
+        return bfs;
+    }
+};
+
+void addEdge(vector<int> adj[], int u, int v)
+{
+    adj[u].push_back(v);
+    adj[v].push_back(u);
+}
+
+void printAns(vector<int> &ans)
+{
+    for (int i = 0; i < ans.size(); i++)
+    {
+        cout << ans[i] << " "<<endl;
+    }
+}
+
+int main()
+{
+    int n,no_adjvert,adj_vert;
+    cout<<"Enter number of vertices: "<<endl;
+    cin>>n;
+    vector<int> adj[n];
+    for (int i=0;i<n;i++)
+    {
+        cout<<"Enter number of adjecent vertices for "<<i<<":";
+        cin>>no_adjvert;
+        for(int j=0;j<no_adjvert;j++)
+        {
+            cout<<"Enter adjecent vertex of "<<i<<":";
+            cin>>adj_vert;
+            for(int k=0;k<adj_vert;k++)
+            {
+                 addEdge(adj, i, adj_vert);
+            }
+        }
+    }
+    Solution obj;
+    cout<<"By DFS: "<<endl;
+    vector<int> ans = obj.dfsOfGraph(n, adj);
+    printAns(ans);
+    cout<<"By BFS: "<<endl;
+    vector<int> bfsans = obj.bfsOfGraph(n, adj);
+    printAns(bfsans);
+
+    return 0;
+}

@@ -1,0 +1,72 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int n{};
+int flag = 0;
+void solution(vector<vector<bool>> &board, int row, bool cols[], bool ndiag[], bool rdiag[], string &ans_so_far)
+{
+    if (row == n)
+    {
+        cout << endl
+             << ans_so_far + " ." << endl;
+        flag = 1;
+        return;
+    }
+    for (int col = 0; col < n; col++)
+    {
+        if (cols[col] == 0 && ndiag[row + col] == 0 && rdiag[row - col + n - 1] == 0)
+        {
+            board[row][col] = 1;
+            cols[col] = 1;
+            ndiag[row + col] = 1;
+            rdiag[row - col + n - 1] = 1;
+            string s = ans_so_far + to_string(row) + "-" + to_string(col) + ", ";
+            solution(board, row + 1, cols, ndiag, rdiag, s);
+            if (flag == 0)
+            {
+                board[row][col] = 0;
+                cols[col] = 0;
+                ndiag[row + col] = 0;
+                rdiag[row - col + n - 1] = 0;
+            }
+        }
+    }
+}
+
+int main()
+{
+    cout << "Enter the size of BOARD \n";
+    cin >> n;
+    string s = "";
+    vector<vector<bool>> board;
+    for (int j = 0; j < n; j++)
+    {
+        vector<bool> u;
+        for (int k = 0; k < n; k++)
+        {
+            u.push_back(0);
+        }
+        board.push_back(u);
+    }
+    for (int j = 0; j < n; j++)
+    {
+        for (int k = 0; k < n; k++)
+        {
+            cout << board[j][k] << " ";
+        }
+        cout << endl;
+    }
+    bool cols[n]{};
+    bool ndiag[2 * n - 1]{};
+    bool rdiag[2 * n - 1]{};
+    solution(board, 0, cols, ndiag, rdiag, s);
+    cout << endl;
+    for (int j = 0; j < n; j++)
+    {
+        for (int k = 0; k < n; k++)
+        {
+            cout << board[j][k] << " ";
+        }
+        cout << endl;
+    }`
+}
